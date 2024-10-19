@@ -1,5 +1,7 @@
 package me.thedivazo.nauka.internship.config;
 
+import java.util.Locale;
+
 public interface DBConfig {
     BaseType getBaseType();
     String host();
@@ -9,6 +11,6 @@ public interface DBConfig {
     String password();
 
     enum BaseType {
-        MYSQL, POSTGRESQL
+        MYSQL
     }
 }

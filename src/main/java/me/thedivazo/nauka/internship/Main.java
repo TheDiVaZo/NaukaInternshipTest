@@ -1,5 +1,7 @@
 package me.thedivazo.nauka.internship;
 
+import me.thedivazo.nauka.internship.db.EmployeeEntity;
+
 public class Main {
     public static void main(String[] args) {
 
