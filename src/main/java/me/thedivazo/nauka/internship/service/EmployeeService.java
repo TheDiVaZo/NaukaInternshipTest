@@ -14,6 +14,6 @@ public interface EmployeeService {
     void initDatabase();
     boolean addEmployee(EmployeeEntity employeeEntity);
     Optional<EmployeeEntity> findById(int id);
-    List<EmployeeEntity> groupByName(String name);
+    List<EmployeeEntity> groupByName();
     List<EmployeeEntity> findBetween(LocalDate start, LocalDate end);
 }

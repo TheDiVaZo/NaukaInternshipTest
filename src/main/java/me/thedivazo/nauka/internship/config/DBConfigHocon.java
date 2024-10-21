@@ -21,6 +21,7 @@ public final class DBConfigHocon implements DBConfig {
 
     public DBConfigHocon(String name) {
         this.config = ConfigFactory.load(name);
+        if (config == null) throw new IllegalArgumentException("No such configuration file: " + name);
     }
 
 

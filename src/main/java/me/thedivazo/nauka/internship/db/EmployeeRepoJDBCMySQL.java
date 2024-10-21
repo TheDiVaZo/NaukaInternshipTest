@@ -152,7 +152,7 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
     }
 
     @Override
-    public Iterable<EmployeeEntity> groupByName(String name) throws Exception {
+    public Iterable<EmployeeEntity> groupByName() throws Exception {
         String query = """
                 SELECT (ID, NAME, SURNAME, BIRTHDAY, DEPARTMENT, SALARY_IN_KOPECK) FROM EMPLOYEE GROUP BY NAME
                 """;

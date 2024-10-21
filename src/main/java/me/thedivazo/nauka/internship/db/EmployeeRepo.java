@@ -11,6 +11,6 @@ public interface EmployeeRepo {
     void createTable()  throws Exception;
     boolean addEmployee(EmployeeEntity employeeEntity) throws Exception;
     Optional<EmployeeEntity> findById(int id)  throws Exception;
-    Iterable<EmployeeEntity> groupByName(String name)  throws Exception;
+    Iterable<EmployeeEntity> groupByName()  throws Exception;
     Iterable<EmployeeEntity> findBetween(LocalDate start, LocalDate end)  throws Exception;
 }

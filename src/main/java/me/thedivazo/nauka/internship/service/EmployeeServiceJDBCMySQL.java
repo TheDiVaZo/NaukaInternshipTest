@@ -1,9 +1,9 @@
 package me.thedivazo.nauka.internship.service;
 
-import lombok.AllArgsConstructor;
 import me.thedivazo.nauka.internship.config.DBConfig;
 import me.thedivazo.nauka.internship.db.EmployeeEntity;
 import me.thedivazo.nauka.internship.db.EmployeeRepoJDBCMySQL;
+import me.thedivazo.nauka.internship.exception.DBException;
 import me.thedivazo.nauka.internship.util.ListUtils;
 
 import java.time.LocalDate;
@@ -23,7 +23,7 @@ public final class EmployeeServiceJDBCMySQL implements EmployeeService {
         try {
             employeeRepo.createTable();
         } catch (Exception e) {
-            throw new RuntimeException("Error create table", e);
+            throw new DBException("Error create table", e);
         }
     }
 
@@ -32,7 +32,7 @@ public final class EmployeeServiceJDBCMySQL implements EmployeeService {
         try {
             return employeeRepo.addEmployee(employeeEntity);
         } catch (Exception e) {
-            throw new RuntimeException("Error add employee."+employeeEntity,e);
+            throw new DBException("Error add employee."+employeeEntity,e);
         }
     }
 
@@ -41,16 +41,16 @@ public final class EmployeeServiceJDBCMySQL implements EmployeeService {
         try {
             return employeeRepo.findById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Error find for id",e);
+            throw new DBException("Error find for id",e);
         }
     }
 
     @Override
-    public List<EmployeeEntity> groupByName(String name) {
+    public List<EmployeeEntity> groupByName() {
         try {
-            return ListUtils.getListView(employeeRepo.groupByName(name));
+            return ListUtils.getListView(employeeRepo.groupByName());
         } catch (Exception e) {
-            throw new RuntimeException("Error get grouped employees",e);
+            throw new DBException("Error get grouped employees",e);
         }
     }
 
@@ -59,7 +59,7 @@ public final class EmployeeServiceJDBCMySQL implements EmployeeService {
         try {
             return ListUtils.getListView(employeeRepo.findBetween(start, end));
         } catch (Exception e) {
-            throw new RuntimeException("Error find employees between "+start+" and "+end,e);
+            throw new DBException("Error find employees between "+start+" and "+end,e);
         }
     }
 }
