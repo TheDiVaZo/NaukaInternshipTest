@@ -8,9 +8,9 @@ import java.util.Optional;
  * created on 19.10.2024
  */
 public interface EmployeeRepo {
-    void createTable();
-    boolean addEmployee(EmployeeEntity employeeEntity);
-    Optional<EmployeeEntity> findById(int id);
-    Iterable<EmployeeEntity> groupByName(String name);
-    Iterable<EmployeeEntity> findBetween(LocalDate start, LocalDate end);
+    void createTable()  throws Exception;
+    boolean addEmployee(EmployeeEntity employeeEntity) throws Exception;
+    Optional<EmployeeEntity> findById(int id)  throws Exception;
+    Iterable<EmployeeEntity> groupByName(String name)  throws Exception;
+    Iterable<EmployeeEntity> findBetween(LocalDate start, LocalDate end)  throws Exception;
 }

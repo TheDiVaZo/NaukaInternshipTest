@@ -11,7 +11,7 @@ import java.util.Optional;
  * created on 19.10.2024
  */
 public interface EmployeeService {
-    void createTable();
+    void initDatabase();
     boolean addEmployee(EmployeeEntity employeeEntity);
     Optional<EmployeeEntity> findById(int id);
     List<EmployeeEntity> groupByName(String name);

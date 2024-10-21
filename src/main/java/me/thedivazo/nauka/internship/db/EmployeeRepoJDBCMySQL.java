@@ -21,7 +21,6 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
     private final String username;
     private final String password;
 
-
     private String getURL() {
         return String.format("jdbc:mysql://%s:%s/%s",
                 host,
@@ -35,65 +34,42 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
         return usernameIsEmpty || passwordIsEmpty ? DriverManager.getConnection(getURL()) : DriverManager.getConnection(getURL(), username, password);
     }
 
-    private void closeAutocloseable(AutoCloseable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
+    private void closeAutocloseable(AutoCloseable closeable) throws Exception {
+        if (closeable != null)
+            closeable.close();
     }
 
-    private void noAutoCommitConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.setAutoCommit(false);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    private void noAutoCommitConnection(Connection connection) throws SQLException {
+        if (connection != null)
+            connection.setAutoCommit(false);
     }
 
-    private void rollbackConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    private void rollbackConnection(Connection connection) throws SQLException {
+        if (connection != null)
+            connection.rollback();
     }
 
-    private Iterable<EmployeeEntity> toEmployees(ResultSet resultSet) {
+    private Iterable<EmployeeEntity> toEmployees(ResultSet resultSet) throws SQLException {
         List<EmployeeEntity> employees = new LinkedList<>();
-        try {
-            while (resultSet.next()) {
-                employees.add(toEmployee(resultSet));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        while (resultSet.next()) {
+            employees.add(toEmployee(resultSet));
         }
         return employees;
     }
 
-    private EmployeeEntity toEmployee(ResultSet resultSet) {
-        try {
-            return new EmployeeEntity(
-                    resultSet.getInt("ID"),
-                    resultSet.getString("NAME"),
-                    resultSet.getString("SURNAME"),
-                    resultSet.getDate("BIRTHDAY").toLocalDate(),
-                    resultSet.getString("DEPARTMENT"),
-                    resultSet.getInt("SALARY_IN_KOPECK")
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    private EmployeeEntity toEmployee(ResultSet resultSet) throws SQLException {
+        return new EmployeeEntity(
+                resultSet.getInt("ID"),
+                resultSet.getString("NAME"),
+                resultSet.getString("SURNAME"),
+                resultSet.getDate("BIRTHDAY").toLocalDate(),
+                resultSet.getString("DEPARTMENT"),
+                resultSet.getInt("SALARY_IN_KOPECK")
+        );
     }
 
     @Override
-    public void createTable() {
+    public void createTable() throws Exception {
         String query = """
                 CREATE TABLE IF NOT EXISTS EMPLOYEE (
                     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -112,7 +88,7 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
             statement = connection.createStatement();
             statement.executeUpdate(query);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed create table", e);
         } finally {
             closeAutocloseable(connection);
             closeAutocloseable(statement);
@@ -120,7 +96,7 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
     }
 
     @Override
-    public boolean addEmployee(EmployeeEntity employeeEntity) {
+    public boolean addEmployee(EmployeeEntity employeeEntity) throws Exception {
         String query = """
                 INSERT INTO EMPLOYEE (NAME, SURNAME, BIRTHDAY, DEPARTMENT, SALARY_IN_KOPECK)
                 VALUES(?, ?, ?, ?, ?);
@@ -141,7 +117,7 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
             rollbackConnection(connection);
-            throw new RuntimeException(e);
+            throw e;
         } finally {
             closeAutocloseable(connection);
             closeAutocloseable(statement);
@@ -149,7 +125,7 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
     }
 
     @Override
-    public Optional<EmployeeEntity> findById(int id) {
+    public Optional<EmployeeEntity> findById(int id) throws Exception {
         String query = """
                 SELECT (ID, NAME, SURNAME, BIRTHDAY, DEPARTMENT, SALARY_IN_KOPECK) FROM EMPLOYEE WHERE ID = ?;
                 """;
@@ -168,8 +144,6 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
             } else {
                 return Optional.empty();
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         } finally {
             closeAutocloseable(connection);
             closeAutocloseable(statement);
@@ -178,7 +152,7 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
     }
 
     @Override
-    public Iterable<EmployeeEntity> groupByName(String name) {
+    public Iterable<EmployeeEntity> groupByName(String name) throws Exception {
         String query = """
                 SELECT (ID, NAME, SURNAME, BIRTHDAY, DEPARTMENT, SALARY_IN_KOPECK) FROM EMPLOYEE GROUP BY NAME
                 """;
@@ -192,8 +166,6 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
             resultSet = statement.executeQuery();
 
             return toEmployees(resultSet);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         } finally {
             closeAutocloseable(connection);
             closeAutocloseable(statement);
@@ -202,7 +174,7 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
     }
 
     @Override
-    public Iterable<EmployeeEntity> findBetween(LocalDate start, LocalDate end) {
+    public Iterable<EmployeeEntity> findBetween(LocalDate start, LocalDate end) throws Exception {
         String query = """
                 SELECT (ID, NAME, SURNAME, BIRTHDAY, DEPARTMENT, SALARY_IN_KOPECK) FROM EMPLOYEE WHERE BIRTHDAY BETWEEN ? AND ?;
                 """;
@@ -218,8 +190,6 @@ public final class EmployeeRepoJDBCMySQL implements EmployeeRepo {
             resultSet = statement.executeQuery();
 
             return toEmployees(resultSet);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         } finally {
             closeAutocloseable(connection);
             closeAutocloseable(statement);

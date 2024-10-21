@@ -2,6 +2,7 @@ package me.thedivazo.nauka.internship.db;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
  * created on 19.10.2024
  */
 @Getter
+@ToString
 public class EmployeeEntity {
     private final int id;
     private final String name;
