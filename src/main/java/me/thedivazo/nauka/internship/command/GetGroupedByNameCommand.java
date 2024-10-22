@@ -23,7 +23,7 @@ public final class GetGroupedByNameCommand implements Command {
         }
         out.println("Группированные имена сотрудников:");
         for (String name : names) {
-            System.out.println(name);
+            out.println(name);
         }
     }
 }

@@ -31,9 +31,9 @@ public class App {
             for (int i = 0; i < 20; i++) {
                 employeeService.addEmployee(EmployeeUtils.generateRandomEmployee());
             }
-            System.out.println("Набор случайных сотрудников успешно добавлен");
+            out.println("Набор случайных сотрудников успешно добавлен");
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(out);
             out.println("Ошибка при инициализации базы данных. Пожалуйста, проверьте конфигурацию на корректность данных");
             return;
         }
@@ -70,7 +70,7 @@ public class App {
                         return;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                e.printStackTrace(out);
                 out.println("" +
                         "Возникла ошибка при выполнении команды. " +
                         "Пожалуйста, проверьте корректноть базы данных и попробуйте еще раз." +
