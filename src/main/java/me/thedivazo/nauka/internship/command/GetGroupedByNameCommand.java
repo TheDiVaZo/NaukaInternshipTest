@@ -3,8 +3,9 @@ package me.thedivazo.nauka.internship.command;
 
 import lombok.AllArgsConstructor;
 import me.thedivazo.nauka.internship.db.EmployeeEntity;
-import me.thedivazo.nauka.internship.service.EmployeeService;
+import me.thedivazo.nauka.internship.db.EmployeeService;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,15 +13,17 @@ import java.util.Scanner;
 public final class GetGroupedByNameCommand implements Command {
     private final EmployeeService employeeService;
     private final Scanner scanner;
+    private final PrintStream out;
 
     @Override
     public void execute() {
-        List<EmployeeEntity> employees = employeeService.groupByName();
-        if (employees.isEmpty()) {
-            System.out.println("В базе данных нет сотрудников");
+        List<String> names = employeeService.groupByName();
+        if (names.isEmpty()) {
+            out.println("В базе данных нет сотрудников");
         }
-        for (EmployeeEntity employee : employees) {
-            System.out.printf("id: %d, имя: %s %s\n", employee.getId(), employee.getName(), employee.getSurname());
+        out.println("Группированные имена сотрудников:");
+        for (String name : names) {
+            System.out.println(name);
         }
     }
 }

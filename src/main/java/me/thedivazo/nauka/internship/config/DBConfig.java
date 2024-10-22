@@ -11,6 +11,6 @@ public interface DBConfig {
     String password();
 
     enum BaseType {
-        MYSQL
+        MYSQL, LOCAL
     }
 }

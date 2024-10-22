@@ -1,9 +1,30 @@
 plugins {
+    id 'com.gradleup.shadow' version '8.3.3'
     id 'java'
 }
 
 group = 'me.thedivazo.nauka.internship'
 version = '1.0-SNAPSHOT'
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    manifest {
+        attributes(
+                //'Class-Path': configurations.collect { it.toString() }.join(' '),
+                'Main-Class': 'me.thedivazo.nauka.internship.Main')
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+jar.dependsOn shadowJar
 
 repositories {
     mavenCentral()
@@ -17,7 +38,13 @@ dependencies {
     implementation 'com.typesafe:config:1.4.3'
 
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    implementation 'mysql:mysql-connector-java:5.1.6'
+    //implementation 'mysql:mysql-connector-java:5.1.6'
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation 'mysql:mysql-connector-java:8.0.11'
+
+
+    // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
+    implementation 'it.unimi.dsi:fastutil:8.2.1'
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -27,5 +54,10 @@ dependencies {
 }
 
 test {
+    systemProperty "file.encoding", "utf-8"
     useJUnitPlatform()
+}
+
+shadowJar {
+
 }

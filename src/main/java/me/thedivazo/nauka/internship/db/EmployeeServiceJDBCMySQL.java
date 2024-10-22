@@ -1,8 +1,6 @@
-package me.thedivazo.nauka.internship.service;
+package me.thedivazo.nauka.internship.db;
 
 import me.thedivazo.nauka.internship.config.DBConfig;
-import me.thedivazo.nauka.internship.db.EmployeeEntity;
-import me.thedivazo.nauka.internship.db.EmployeeRepoJDBCMySQL;
 import me.thedivazo.nauka.internship.exception.DBException;
 import me.thedivazo.nauka.internship.util.ListUtils;
 
@@ -14,7 +12,7 @@ public final class EmployeeServiceJDBCMySQL implements EmployeeService {
     private final EmployeeRepoJDBCMySQL employeeRepo;
 
     public EmployeeServiceJDBCMySQL(DBConfig dbConfig) throws ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         this.employeeRepo = new EmployeeRepoJDBCMySQL(dbConfig.host(), dbConfig.port(), dbConfig.database(), dbConfig.username(), dbConfig.password());
     }
 
@@ -46,7 +44,7 @@ public final class EmployeeServiceJDBCMySQL implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeEntity> groupByName() {
+    public List<String> groupByName() {
         try {
             return ListUtils.getListView(employeeRepo.groupByName());
         } catch (Exception e) {

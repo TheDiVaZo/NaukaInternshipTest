@@ -1,6 +1,4 @@
-package me.thedivazo.nauka.internship.service;
-
-import me.thedivazo.nauka.internship.db.EmployeeEntity;
+package me.thedivazo.nauka.internship.db;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +12,6 @@ public interface EmployeeService {
     void initDatabase();
     boolean addEmployee(EmployeeEntity employeeEntity);
     Optional<EmployeeEntity> findById(int id);
-    List<EmployeeEntity> groupByName();
+    List<String> groupByName();
     List<EmployeeEntity> findBetween(LocalDate start, LocalDate end);
 }
