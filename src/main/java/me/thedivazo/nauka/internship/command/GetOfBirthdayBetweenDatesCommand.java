@@ -64,7 +64,8 @@ public final class GetOfBirthdayBetweenDatesCommand implements Command {
         out.println("Список сотрудников, день рождения который с "+localDateStart.getYear()+" года по "+localDateEnd.getYear()+" год:");
         for (EmployeeEntity employee : employees) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            out.printf("%s %s (%s)%n",
+            out.printf("%s: %s %s (%s)%n",
+                    employee.getId(),
                     employee.getName(),
                     employee.getSurname(),
                     employee.getBirthday().format(formatter)
